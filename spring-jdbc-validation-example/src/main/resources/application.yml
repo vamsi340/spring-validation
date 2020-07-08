@@ -1,0 +1,14 @@
+#Data base connection
+spring: 
+   jpa:
+      properties: 
+         hibernate: 
+            dialect: org.hibernate.dialect.PostgreSQLDialect
+            show-sql: true
+   datasource:
+      url: jdbc:postgresql://localhost:5432/vamsiDB
+      username: postgres
+      password: postgres
+#server port 
+server:
+   port: 9090
