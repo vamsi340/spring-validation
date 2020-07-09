@@ -3,17 +3,18 @@ package com.example.demo.repository;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import javax.validation.Valid;
 
-import com.example.demo.entity.PersonDetails;
+import com.example.demo.dto.PersonDto;
 
-public interface PersonRepository extends JpaRepository<PersonDetails, Integer> {
+public interface PersonRepository{
 
-	@Query(value = "SELECT * FROM person_details WHERE person_id = ? AND active = true", nativeQuery = true)
-	public Optional<PersonDetails> findById(int id);
+	public PersonDto findById(int id);
 
-	@Query(value = "SELECT * FROM person_details WHERE active = true order by person_id DESC", nativeQuery = true)
-	public List<PersonDetails> findAll();
+	public List<PersonDto> findAll();
+
+	public void save(@Valid PersonDto personDetails);
+
+	public void deleteById(int id);
 	
 }

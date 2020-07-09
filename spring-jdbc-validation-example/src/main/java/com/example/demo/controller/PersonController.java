@@ -12,12 +12,11 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.entity.PersonDetails;
+import com.example.demo.dto.PersonDto;
 import com.example.demo.service.PersonService;
 /**
  * 
@@ -38,22 +37,9 @@ public class PersonController {
 	 * @return
 	 */
 	@PostMapping("/create")
-	public ResponseEntity<PersonDetails> createPersonDetails(@Valid @RequestBody PersonDetails personDetails) {
-		PersonDetails person = personService.create(personDetails);
-		return new ResponseEntity<PersonDetails>(person,HttpStatus.CREATED);
-	}
-
-	/**
-	 * This API for Update Person Details.
-	 * 
-	 * @param personDetails
-	 * @return
-	 * @throws Exception 
-	 */
-	@PutMapping("/update")
-	public ResponseEntity<PersonDetails> updatePersonDetails(@Valid @RequestBody PersonDetails personDetails) throws Exception {
-		PersonDetails person = personService.update(personDetails);
-		return new ResponseEntity<PersonDetails>(person, HttpStatus.OK);
+	public ResponseEntity<PersonDto> createPersonDetails(@Valid @RequestBody PersonDto personDetails) {
+		 personService.create(personDetails);
+		return new ResponseEntity<PersonDto>(HttpStatus.CREATED);
 	}
 
 	/**
@@ -63,9 +49,9 @@ public class PersonController {
 	 * @throws Exception 
 	 */
 	@GetMapping("/getbyid/{id}")
-	public ResponseEntity<Optional<PersonDetails>> getBasedOnPersonId(@PathVariable(name = "id", required = true) int id) throws Exception {
-		Optional<PersonDetails> person = personService.getBasedOnPersonId(id);
-		return new ResponseEntity<Optional<PersonDetails>>(person,HttpStatus.OK);
+	public ResponseEntity<PersonDto> getBasedOnPersonId(@PathVariable(name = "id", required = true) int id) throws Exception {
+		PersonDto person = personService.getBasedOnPersonId(id);
+		return new ResponseEntity<PersonDto>(person,HttpStatus.OK);
 	}
 
 	/**
@@ -74,9 +60,9 @@ public class PersonController {
 	 * @return
 	 */
 	@GetMapping("/getall")
-	public ResponseEntity<List<PersonDetails>> getAllPesonDetails() {
-		List<PersonDetails> person = personService.getAllPersonDetails();
-		return new ResponseEntity<List<PersonDetails>>(person, HttpStatus.OK);
+	public ResponseEntity<List<PersonDto>> getAllPesonDetails() {
+		List<PersonDto> person = personService.getAllPersonDetails();
+		return new ResponseEntity<List<PersonDto>>(person, HttpStatus.OK);
 	}
 
 	/**
