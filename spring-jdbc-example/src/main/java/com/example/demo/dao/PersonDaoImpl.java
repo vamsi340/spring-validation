@@ -19,49 +19,47 @@ import com.example.demo.rowmapper.PersonMapper;
 @Repository
 public class PersonDaoImpl implements PersonDao {
 
+	private final String SQL_FIND_PERSON = "SELECT * FROM person WHERE person_id = ?";
+	private final String SQL_GET_ALL = "SELECT * FROM person order by person_id DESC";
+	private final String SQL_DELETE_PERSON = "DELETE FROM person WHERE person_id= ?";
+	private final String SQL_UPDATE_PERSON = "UPDATE person SET person_name = ? , person_age = ?, phone_number = ?, person_email = ?, person_state = ? , country = ? WHERE person_id = ?";
+	private final String SQL_INSERT_PERSON = "INSERT INTO person(person_id, person_name, person_age, phone_number, person_email, person_state, country) values(?,?,?,?,?,?,?)";
+
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
 	public void create(@Valid PersonDto personDetails) {
-		
-		String query = "INSERT INTO person VALUES('" + personDetails.getPersonId() + "','" + personDetails.getPersonName()
-				+ "','" + personDetails.getPersonAge() + "','" + personDetails.getPhoneNumber() + "','"
-				+ personDetails.getPersonEmail() + "','" + personDetails.getState() + "','" + personDetails.getCountry()
-				+ "')";
-		
-		jdbcTemplate.update(query);
+
+		jdbcTemplate.update(SQL_INSERT_PERSON, personDetails.getPersonId(), personDetails.getPersonName(),
+				personDetails.getPersonAge(), personDetails.getPhoneNumber(), personDetails.getPersonEmail(),
+				personDetails.getState(), personDetails.getCountry());
+
 	}
 
 	@Override
 	public void update(@Valid PersonDto personDetails) {
 
-		String query = "UPDATE person SET person_name='" + personDetails.getPersonName() + "',person_age='"
-				+ personDetails.getPersonAge() + "' ,phone_number = '" + personDetails.getPhoneNumber()
-				+ "', person_email = '" + personDetails.getPersonEmail() + "',person_state = '"
-				+ personDetails.getState() + "', country = '" + personDetails.getCountry() + "'  WHERE person_id='"
-				+ personDetails.getPersonId() + "' ";
-		jdbcTemplate.update(query);
+		jdbcTemplate.update(SQL_UPDATE_PERSON, personDetails.getPersonName(), personDetails.getPersonAge(),
+				personDetails.getPhoneNumber(), personDetails.getPersonEmail(), personDetails.getState(),
+				personDetails.getCountry(), personDetails.getPersonId());
 	}
 
 	@Override
 	public PersonDto getById(int id) {
-		String sql = "SELECT * FROM person WHERE person_id='" + id + "'";
-		PersonDto person = jdbcTemplate.queryForObject(sql,new PersonMapper());
+		PersonDto person = jdbcTemplate.queryForObject(SQL_FIND_PERSON, new Object[] { id }, new PersonMapper());
 		return person;
 	}
 
 	@Override
 	public List<PersonDto> getAll() {
-		String Sql = "SELECT * FROM person order by person_id DESC";
-		List<PersonDto> person = jdbcTemplate.query(Sql, new PersonMapper());
+		List<PersonDto> person = jdbcTemplate.query(SQL_GET_ALL, new PersonMapper());
 		return person;
 	}
 
 	@Override
 	public void delete(int id) {
-		 String query="DELETE FROM person WHERE person_id='"+id+"' ";  
-		   jdbcTemplate.update(query);  
+		jdbcTemplate.update(SQL_DELETE_PERSON, new Object[] { id });
 
 	}
 
